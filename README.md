@@ -12,7 +12,7 @@ define command{
 # Contributing
 Please feel free to fork, and collaborate to this little but usefull project.
 
-#Point to be improve
+#Parts of script to improve
 - HD Temperature and Status for each disk we have to automate this
 - Improve Performance output for most command
 
