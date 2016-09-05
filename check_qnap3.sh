@@ -15,7 +15,8 @@
 #
 # contact the author directly for more information at: matthias@xcontrol.de
 ##########################################################################################
-#Version 1.14
+
+#Version 1.15
 
 if [ ! "$#" == "5" ]; then
     	echo -e "\nWarning: Wrong command line arguments. \nUsage: ./check_qnap <hostname> <community> <part> <warning> <critical>\n \nParts are:  sysinfo, systemuptime, cpu, cputemp, freeram, diskused, temp, tmphd1, tmphd2, tmphd3 tmphd4, hdstatus, hd1status, hd2status, hd3status, hd4status and volstatus (volstatus = Raid Info)\nExample: ./check_qnap 127.0.0.1 public diskusage 80 95\n" && exit "3"
@@ -34,21 +35,12 @@ echo "CRITICAL: SNMP to $strHostname is not available";
 exit 2; 
 fi
 
-#OID HdNum
- #.1.3.6.1.4.1.24681.1.2.10
-#systemuptime
- #.1.3.6.1.2.1.25.1.1
-#CPU system-usage  
-#  .1.3.6.1.4.1.24681.1.2.1
-
-
 # DISKUSAGE ---------------------------------------------------------------------------------------------------------------------------------------
 if [ "$strpart" == "diskused" ]; then
 	disk=$(snmpget -v1 -c "$strCommunity" "$strHostname" 1.3.6.1.4.1.24681.1.2.17.1.4.1 | awk '{print $4}' | sed 's/.\(.*\)/\1/')
 	free=$(snmpget -v1 -c "$strCommunity" "$strHostname" 1.3.6.1.4.1.24681.1.2.17.1.5.1 | awk '{print $4}' | sed 's/.\(.*\)/\1/')
 	UNITtest=$(snmpget -v1 -c "$strCommunity" "$strHostname" 1.3.6.1.4.1.24681.1.2.17.1.4.1 | awk '{print $5}' | sed 's/.*\(.B\).*/\1/')
 	UNITtest2=$(snmpget -v1 -c "$strCommunity" "$strHostname" 1.3.6.1.4.1.24681.1.2.17.1.5.1 | awk '{print $5}' | sed 's/.*\(.B\).*/\1/')
-
         #echo $disk - $free - $GBtest - $GBtest2 
 
 	if [ "$UNITtest" == "TB" ]; then
@@ -66,7 +58,7 @@ if [ "$strpart" == "diskused" ]; then
 	disk=$(echo "scale=0; $disk*$factor" | bc -l)
 	free=$(echo "scale=0; $free*$factor2" | bc -l)
 	
-	#debug used=$(echo "scale=0; 9000*1000" | bc -l) #
+	#debug used=$(echo "scale=0; 9000*1000" | bc -l) 
 	used=$(echo "scale=0; $disk-$free" | bc -l)
 	
 	PERC=$(echo "scale=0; $used*100/$disk" | bc -l)
@@ -121,7 +113,6 @@ elif [ "$strpart" == "cputemp" ]; then
             	echo "Cpu temperatur to high!: "$OUTPUT
             	exit 2
     	else
-
             	if [ $TEMP0 -ge "$strCritical" ]; then
                     	echo "CRITICAL: "$OUTPUT
                     	exit 2
