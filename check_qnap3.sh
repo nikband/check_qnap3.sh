@@ -165,7 +165,7 @@ elif [ "$strpart" == "temp" ]; then
 	OUTPUT="Temperature="$TEMP0"C|NAS termperature="$TEMP0"C;$strWarning;$strCritical;0;60"
 
     	if [ "$TEMP0" -ge "59" ]; then
-            	echo "Sytem temperatur to high!: "$OUTPUT
+            	echo "System temperatur to high!: "$OUTPUT
             	exit 2
     	else
 
@@ -542,10 +542,15 @@ elif [ "$strpart" == "hdstatus" ]; then
     	   elif [ "$HD" == "--" ]; then    	        
     	        hdnop=$(echo "scale=0; $hdnop+1" | bc -l)
     	   else
-            	echo "HD Status: CRITICAL"
-            	exit 2
+                output_crit=${output_crit}" Disk ${c}"
     	   fi
 	done
+
+    if [ -n "$output_crit" ]
+    then
+        echo "HD Status: CRITICAL ${output_crit}"
+        exit 2
+    fi
 
 	echo "HS Status: OK Disk $hdok, Free Slot $hdnop"
 	exit 0
