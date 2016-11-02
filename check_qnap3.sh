@@ -99,7 +99,7 @@ if [ "$strpart" == "diskused" ]; then
 # CPU ----------------------------------------------------------------------------------------------------------------------------------------------
 elif [ "$strpart" == "cpu" ]; then
     	CPU=$(snmpget -v1 -c "$strCommunity" $strHostname 1.3.6.1.4.1.24681.1.2.1.0 | awk '{print $4 $5}' | sed 's/.\(.*\)...../\1/')
-	OUTPUT="Load="$CPU"%|CPU load="$CPU"%;$strWarning;$strCritical;0;100" 
+	OUTPUT="CPU Load="$CPU"%|CPU load="$CPU"%;$strWarning;$strCritical;0;100" 
 
    	if [ $CPU -ge $strCritical ]; then
 		echo "CRITICAL: "$OUTPUT
