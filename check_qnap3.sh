@@ -51,7 +51,7 @@ if [ "$strpart" == "diskused" ]; then
 	free=$(snmpget -v1 -c "$strCommunity" "$strHostname" 1.3.6.1.4.1.24681.1.2.17.1.5.1 | awk '{print $4}' | sed 's/.\(.*\)/\1/')
 	UNITtest=$(snmpget -v1 -c "$strCommunity" "$strHostname" 1.3.6.1.4.1.24681.1.2.17.1.4.1 | awk '{print $5}' | sed 's/.*\(.B\).*/\1/')
 	UNITtest2=$(snmpget -v1 -c "$strCommunity" "$strHostname" 1.3.6.1.4.1.24681.1.2.17.1.5.1 | awk '{print $5}' | sed 's/.*\(.B\).*/\1/')
-        #echo $disk - $free - $GBtest - $GBtest2 
+        #echo $disk - $free - $UNITtest - $UNITtest2 
 
 	if [ "$UNITtest" == "TB" ]; then
 	 factor=$(echo "scale=0; 1000" | bc -l)
