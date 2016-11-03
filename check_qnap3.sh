@@ -162,9 +162,9 @@ elif [ "$strpart" == "freeram" ]; then
 # System Temperature---------------------------------------------------------------------------------------------------------------------------------------
 elif [ "$strpart" == "temp" ]; then
     	TEMP0=$(snmpget -v1 -c "$strCommunity" $strHostname 1.3.6.1.4.1.24681.1.2.6.0 | awk '{print $4}' | cut -c2-3)
-	OUTPUT="Temperature="$TEMP0"C|NAS termperature="$TEMP0"C;$strWarning;$strCritical;0;60"
+	OUTPUT="Temperature="$TEMP0"C|NAS termperature="$TEMP0"C;$strWarning;$strCritical;0;80"
 
-    	if [ "$TEMP0" -ge "59" ]; then
+    	if [ "$TEMP0" -ge "89" ]; then
             	echo "System temperatur to high!: "$OUTPUT
             	exit 2
     	else
