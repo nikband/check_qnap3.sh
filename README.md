@@ -15,8 +15,8 @@ define command{
 $ARG1$ - HostAddress
 $ARG2$ - Snmp Comunity
 $ARG3$ - Type of Check (part)
-$ARG4$ - Warning  (mandatory buy for some check use simbolic value like 1)
-$ARG5$ - Critical (mandatory buy for some check use simbolic value like 1)
+$ARG4$ - Warning  (mandatory for some check use simbolic value like 1)
+$ARG5$ - Critical (mandatory for some check use simbolic value like 1)
 
 # Contributing
 Please feel free to fork, and collaborate to this little but usefull project.
