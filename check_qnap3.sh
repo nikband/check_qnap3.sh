@@ -17,7 +17,7 @@
 #
 # contact the author directly for more information at: matthias@xcontrol.de
 ##########################################################################################
-#Version 1.18
+#Version 1.19
 
 if [ ! "$#" == "5" ]; then
         echo
