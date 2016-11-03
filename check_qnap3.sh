@@ -549,10 +549,10 @@ elif [ "$strpart" == "hdstatus" ]; then
 
     if [ -n "$output_crit" ]
     then
-        echo "HD Status: CRITICAL ${output_crit}"
+        echo "CRITICAL: ${output_crit}"
         exit 2
     else
-	echo "HS Status: OK Disk $hdok, Free Slot $hdnop"
+	echo "OK: Online Disk $hdok, Free Slot $hdnop"
 	exit 0    
     fi
 
