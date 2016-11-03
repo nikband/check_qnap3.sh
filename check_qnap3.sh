@@ -81,7 +81,7 @@ if [ "$strpart" == "diskused" ]; then
 	cdisk=$(echo "scale=0; $strCritical*$disk/100" | bc -l)
 	
 	#OUTPUT="total:"$disk"$UNITtest - used:"$used"$UNITtest - free:"$free"$UNITtest2 =  $PERC%|Used=$PERC%;$strWarning;$strCritical;0;100"
-        OUTPUT="total:"$diskF"$UNITtest - used:"$usedF"$UNITtest - free:"$freeF"$UNITtest2 =  $PERC%|Used=$used;$wdisk;$cdisk;0;$disk"
+        OUTPUT="Total:"$diskF"$UNITtest - Used:"$usedF"$UNITtest - Free:"$freeF"$UNITtest2 =  $PERC%|Used=$used;$wdisk;$cdisk;0;$disk"
 	
 	if [ $PERC -ge $strCritical ]; then
 		echo "CRITICAL: "$OUTPUT
@@ -144,7 +144,7 @@ elif [ "$strpart" == "freeram" ]; then
 	
 	let "RAMPERC=(100-($FREERAM*100)/$TOTALRAM)"
 	
-	OUTPUT="total:"$TOTALRAM"MB - used:"$USEDRAM"MB - free:"$FREERAM"MB = "$RAMPERC"%|Memory usage="$RAMPERC"%;$strWarning;$strCritical;0;100"
+	OUTPUT="Total:"$TOTALRAM"MB - Used:"$USEDRAM"MB - Free:"$FREERAM"MB = "$RAMPERC"%|Memory usage="$RAMPERC"%;$strWarning;$strCritical;0;100"
 
 	if [ $RAMPERC -ge $strCritical ]; then
 		echo "CRITICAL: "$OUTPUT
@@ -532,6 +532,7 @@ elif [ "$strpart" == "hdstatus" ]; then
 
         hdok=0
         hdnop=0
+	output_crit=""
 	
 	for (( c=1; c<=$hdnum; c++ ))
 	do
@@ -550,10 +551,10 @@ elif [ "$strpart" == "hdstatus" ]; then
     then
         echo "HD Status: CRITICAL ${output_crit}"
         exit 2
-    fi
-
+    else
 	echo "HS Status: OK Disk $hdok, Free Slot $hdnop"
-	exit 0
+	exit 0    
+    fi
 
 # Volume Status----------------------------------------------------------------------------------------------------------------------------------------
 elif [ "$strpart" == "volstatus" ]; then
