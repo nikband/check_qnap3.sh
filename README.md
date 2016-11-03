@@ -12,14 +12,18 @@ define command{
 $ARG1$ - HostAddress
 $ARG2$ - Snmp Comunity
 $ARG3$ - Type of Check (part)
-$ARG4$ - Warning
+$ARG4$ - Warning 
 $ARG5$ - Critical
 
 # Contributing
 Please feel free to fork, and collaborate to this little but usefull project.
 
-#Parts of script to improve
-- HD Temperature and Status for each disk we have to automate this
-- Improve Performance output for most command
+# Parts of script to improve
+- Power unit check - it's not work
+- HDSTATUS check smart and temperature foreach disk and performance output
+- Improve Performance output for command
+
+# Test
+This script was tested with QNAP model TS-853U-RP (with 4 disk). 
 
 Nicola
