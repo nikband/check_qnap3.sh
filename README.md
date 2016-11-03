@@ -12,11 +12,17 @@ define command{
 	
 }
 
-$ARG1$ - HostAddress
-$ARG2$ - Snmp Comunity
+Parameters:
+$ARG1$ - Nas HostAddress
+
+$ARG2$ - Snmp Community Name with readonly rights
+
 $ARG3$ - Type of Check (part)
+
 $ARG4$ - Warning  (mandatory for some check use simbolic value like 1)
+
 $ARG5$ - Critical (mandatory for some check use simbolic value like 1)
+
 
 # Contributing
 Please feel free to fork, and collaborate to this little but usefull project.
