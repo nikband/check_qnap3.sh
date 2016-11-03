@@ -16,7 +16,7 @@
 #
 # contact the author directly for more information at: matthias@xcontrol.de
 ##########################################################################################
-#Version 1.17
+#Version 1.18
 
 if [ ! "$#" == "5" ]; then
         echo
@@ -609,25 +609,33 @@ elif [ "$strpart" == "powerstatus" ]; then
 # Fan Status----------------------------------------------------------------------------------------------------------------------------------------
 elif [ "$strpart" == "fans" ]; then
      ALLOUTPUT=""
+     PERFOUTPUT=""
      WARNING=0
      CRITICAL=0
      FAN=1
      FANCOUNT=$(snmpget -v1 -c "$strCommunity" "$strHostname" .1.3.6.1.4.1.24681.1.2.14.0 | awk '{print $4}')
      while [ "$FAN" -le "$FANCOUNT" ]; do
         FANSPEED=$(snmpget -v1 -c "$strCommunity" "$strHostname" .1.3.6.1.4.1.24681.1.2.15.1.3.$FAN | awk '{print $4}' | cut -c 2- )
-        if [ "$FANSPEED" -le "$strWarning" ]; then
-                FANSTAT="WARNING: $FANSPEED RPM"
-                WARNING=1
 
-        elif [ "$FANSPEED" -le "$strCritical" ]; then
+	#Performance data
+	if [ $FAN -gt 1 ]; then
+		PERFOUTPUT=$PERFOUTPUT" "
+	fi
+	PERFOUTPUT=$PERFOUTPUT"Fan-$FAN=$FANSPEED;$strWarning;$strCritical" 
+
+        if [ "$FANSPEED" -le "$strCritical" ]; then
                 FANSTAT="CRITICAL: $FANSPEED RPM"
                 CRITICAL=1
+
+        elif [ "$FANSPEED" -le "$strWarning" ]; then
+                FANSTAT="WARNING: $FANSPEED RPM"
+                WARNING=1
         else
                 FANSTAT="OK: $FANSPEED RPM"
         fi
 
         if [ "$FAN" -lt "$FANCOUNT" ]; then
-           ALLOUTPUT="${ALLOUTPUT}Fan #${FAN}: $FANSTAT\n"
+           ALLOUTPUT="${ALLOUTPUT}Fan #${FAN}: $FANSTAT, "
         else
            ALLOUTPUT="${ALLOUTPUT}Fan #${FAN}: $FANSTAT"
         fi
