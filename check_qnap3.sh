@@ -1,4 +1,5 @@
 #!/bin/bash
+############################# Manteined by Nicola Bandini                 ###############
 ############################# Created and written by Matthias Luettermann ###############
 ############################# finetuning by primator@gmail.com
 ############################# finetuning by n.bandini@gmail.com
@@ -558,21 +559,72 @@ elif [ "$strpart" == "hdstatus" ]; then
 
 # Volume Status----------------------------------------------------------------------------------------------------------------------------------------
 elif [ "$strpart" == "volstatus" ]; then
-    	Vol_Status=$(snmpget -v1 -c "$strCommunity" "$strHostname" 1.3.6.1.4.1.24681.1.2.17.1.6.1 | awk '{print $4}' | sed 's/^"\(.*\).$/\1/')
+     ALLOUTPUT=""
+     PERFOUTPUT=""
+     WARNING=0
+     CRITICAL=0
+     VOL=1
+     VOLCOUNT=$(snmpget -v1 -c "$strCommunity" "$strHostname" .1.3.6.1.4.1.24681.1.2.16.0 | awk '{print $4}')
 
-    	if [ "$Vol_Status" == "Ready" ]; then
-            	echo OK: $Vol_Status
-            	exit 0
+     while [ "$VOL" -le "$VOLCOUNT" ]; do
+        Vol_Status=$(snmpget -v1 -c "$strCommunity" "$strHostname" .1.3.6.1.4.1.24681.1.2.17.1.6.$VOL | awk '{print $4}' | sed 's/^"
+\(.*\).$/\1/')
 
-    	elif [ "$Vol_Status" == "Rebuilding..." ]; then
-            	echo "WARNING: "$Vol_Status
-            	exit 1
+        if [ "$Vol_Status" == "Ready" ]; then
+                VOLSTAT="OK: $Vol_Status"
 
-    	else
-            	echo "CRITICAL: "$Vol_Status
-            	exit 2
-    	fi
-	
+        elif [ "$Vol_Status" == "Rebuilding..." ]; then
+                VOLSTAT="WARNING: $Vol_Status"
+                WARNING=1
+        else
+                VOLSTAT="CRITICAL: $Vol_Status"
+                CRITICAL=1
+        fi
+
+        VOLCAPACITY=0
+        VOLFREESIZE=0
+        VOLPCT=0
+
+        VOLCAPACITY=$(snmpget -v2c -c "$strCommunity" "$strHostname" .1.3.6.1.4.1.24681.1.2.17.1.4.$VOL | awk '{print $4}' | sed 's/
+^"\(.*\).$/\1/')
+        VOLFREESIZE=$(snmpget -v2c -c "$strCommunity" "$strHostname" .1.3.6.1.4.1.24681.1.2.17.1.5.$VOL | awk '{print $4}' | sed 's/
+^"\(.*\).$/\1/')
+
+        VOLPCT=`echo "($VOLFREESIZE*100)/$VOLCAPACITY" | bc`
+
+        if [ "$VOLPCT" -le "$strCritical" ]; then
+                VOLPCT="CRITICAL: $VOLPCT"
+                CRITICAL=1
+        elif [ "$VOLPCT" -le "$strWarning" ]; then
+                VOLPCT="WARNING: $VOLPCT"
+                WARNING=1
+        fi
+
+        if [ "$VOL" -lt "$VOLCOUNT" ]; then
+           ALLOUTPUT="${ALLOUTPUT}Volume #${VOL}: $VOLSTAT, Total Size (bytes): $VOLCAPACITY, Free: $VOLFREESIZE (${VOLPCT}%), "
+        else
+           ALLOUTPUT="${ALLOUTPUT}Volume #${VOL}: $VOLSTAT, Total Size (bytes): $VOLCAPACITY, Free: $VOLFREESIZE (${VOLPCT}%)"
+        fi
+		
+	#Performance Data
+        if [ $VOL -gt 1 ]; then
+          PERFOUTPUT=$PERFOUTPUT" "
+        fi
+        PERFOUTPUT=$PERFOUTPUT"FreeSize_Volume-$VOL=${VOLPCT}%;$strWarning;$strCritical;0;100"
+
+        VOL=`expr $VOL + 1`
+     done
+
+     echo $ALLOUTPUT"|"$PERFOUTPUT
+
+     if [ $CRITICAL -eq 1 ]; then
+        exit 2
+     elif [ $WARNING -eq 1 ]; then
+        exit 1
+     else
+        exit 0
+     fi
+     
 # Power Supply Status  ----------------------------------------------------------------------------------------------------------------------------------
 elif [ "$strpart" == "powerstatus" ]; then
      ALLOUTPUT=""
