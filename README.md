@@ -33,6 +33,7 @@ Please feel free to fork, and collaborate to this little but usefull project.
 - HDSTATUS check smart and temperature foreach disk and performance output
 - Volume Status rewrite this part
 - Improve Performance output for command
+- Check script input parameters
 
 # Test
 This script was tested with QNAP model TS-853U-RP (with 4 disk). 
