@@ -29,9 +29,8 @@ $ARG5$ - Critical (mandatory for some check use simbolic value like 1)
 Please feel free to fork, and collaborate to this little but usefull project.
 
 # Parts of script to improve
-- Power unit check - it's not work
-- HDSTATUS check smart and temperature foreach disk and performance output
-- Volume Status rewrite this part
+- Power unit check - this part did not work
+- HDSTATUS check smart and temperature foreach disk and performance output (rewrite this)
 - Improve Performance output for command
 - Check script input parameters
 
