@@ -717,9 +717,10 @@ elif [ "$strpart" == "systemuptime" ]; then
 elif [ "$strpart" == "sysinfo" ]; then
 	model=$(snmpget -v1 -c "$strCommunity" "$strHostname"  .1.3.6.1.4.1.24681.1.2.12.0 | awk '{print $4}' | sed 's/^"\(.*\).$/\1/')
 	hdnum=$(snmpget -v1 -c "$strCommunity" "$strHostname"  .1.3.6.1.4.1.24681.1.2.10.0 | awk '{print $4}')
+	VOLCOUNT=$(snmpget -v1 -c "$strCommunity" "$strHostname" .1.3.6.1.4.1.24681.1.2.16.0 | awk '{print $4}')
 	name=$(snmpget -v1 -c "$strCommunity" "$strHostname"  .1.3.6.1.4.1.24681.1.2.13.0  | awk '{print $4}' | sed 's/^"\(.*\).$/\1/')
 
-	echo NAS $name Model $model, Max HD number $hdnum
+	echo NAS $name Model $model, Max HD number $hdnum, No. Volume $VOLCOUNT
 	exit 0
 
 #----------------------------------------------------------------------------------------------------------------------------------------------------
