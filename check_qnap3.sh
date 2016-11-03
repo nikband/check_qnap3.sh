@@ -643,7 +643,7 @@ elif [ "$strpart" == "fans" ]; then
         FAN=`expr $FAN + 1`
      done
 
-     echo $ALLOUTPUT
+     echo $ALLOUTPUT|$PERFOUTPUT
 
      if [ $CRITICAL -eq 1 ]; then
         exit 2
