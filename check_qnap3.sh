@@ -25,10 +25,12 @@ if [ ! "$#" == "5" ]; then
         echo
 	echo "Usage: ./check_qnap <hostname> <community> <part> <warning> <critical>"
         echo
-	echo "Parts are: sysinfo, systemuptime, temp, cpu, cputemp, freeram, powerstatus, fans, diskused, hdstatus, hd#status, volstatus (volstatus = Raid Info), vol#status"
-        echo "hdstatus shows status & temp; volstatus check all vols; powerstatus check all power supply"
+	echo "Parts are: sysinfo, systemuptime, temp, cpu, cputemp, freeram, powerstatus, fans, diskused, hdstatus, hd#status, hd#temp, volstatus (Raid Volume Status), vol#status"
+        echo
+	echo "hdstatus shows status & temp; volstatus check all vols and vols space; powerstatus check power supply"
         echo "<#> is 1-8 for hd, 1-5 for vol"
         echo " Example: ./check_qnap 127.0.0.1 public diskusage 80 95"
+	echo
         exit 3
 fi
 
@@ -567,8 +569,7 @@ elif [ "$strpart" == "volstatus" ]; then
      VOLCOUNT=$(snmpget -v1 -c "$strCommunity" "$strHostname" .1.3.6.1.4.1.24681.1.2.16.0 | awk '{print $4}')
 
      while [ "$VOL" -le "$VOLCOUNT" ]; do
-        Vol_Status=$(snmpget -v1 -c "$strCommunity" "$strHostname" .1.3.6.1.4.1.24681.1.2.17.1.6.$VOL | awk '{print $4}' | sed 's/^"
-\(.*\).$/\1/')
+        Vol_Status=$(snmpget -v1 -c "$strCommunity" "$strHostname" .1.3.6.1.4.1.24681.1.2.17.1.6.$VOL | awk '{print $4}' | sed 's/^"\(.*\).$/\1/')
 
         if [ "$Vol_Status" == "Ready" ]; then
                 VOLSTAT="OK: $Vol_Status"
@@ -585,10 +586,8 @@ elif [ "$strpart" == "volstatus" ]; then
         VOLFREESIZE=0
         VOLPCT=0
 
-        VOLCAPACITY=$(snmpget -v2c -c "$strCommunity" "$strHostname" .1.3.6.1.4.1.24681.1.2.17.1.4.$VOL | awk '{print $4}' | sed 's/
-^"\(.*\).$/\1/')
-        VOLFREESIZE=$(snmpget -v2c -c "$strCommunity" "$strHostname" .1.3.6.1.4.1.24681.1.2.17.1.5.$VOL | awk '{print $4}' | sed 's/
-^"\(.*\).$/\1/')
+        VOLCAPACITY=$(snmpget -v2c -c "$strCommunity" "$strHostname" .1.3.6.1.4.1.24681.1.2.17.1.4.$VOL | awk '{print $4}' | sed 's/^"\(.*\).$/\1/')
+        VOLFREESIZE=$(snmpget -v2c -c "$strCommunity" "$strHostname" .1.3.6.1.4.1.24681.1.2.17.1.5.$VOL | awk '{print $4}' | sed 's/^"\(.*\).$/\1/')
 
         VOLPCT=`echo "($VOLFREESIZE*100)/$VOLCAPACITY" | bc`
 
