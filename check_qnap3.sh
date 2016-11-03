@@ -695,7 +695,7 @@ elif [ "$strpart" == "fans" ]; then
         FAN=`expr $FAN + 1`
      done
 
-     echo $ALLOUTPUT|$PERFOUTPUT
+     echo $ALLOUTPUT"|"$PERFOUTPUT
 
      if [ $CRITICAL -eq 1 ]; then
         exit 2
@@ -710,18 +710,18 @@ elif [ "$strpart" == "systemuptime" ]; then
     	netuptime=$(snmpget -v1 -c "$strCommunity" "$strHostname" .1.3.6.1.2.1.1.3.0 | awk '{print $5, $6, $7, $8}')
     	sysuptime=$(snmpget -v1 -c "$strCommunity" "$strHostname"  .1.3.6.1.2.1.25.1.1.0 | awk '{print $5, $6, $7, $8}') 
     	
-            	echo System Uptime $sysuptime - Network Uptime $netuptime
-            	exit 0
+	echo System Uptime $sysuptime - Network Uptime $netuptime
+	exit 0
 
 # System Info------------------------------------------------------------------------------------------------------------------------------------------
 elif [ "$strpart" == "sysinfo" ]; then
-    	model=$(snmpget -v1 -c "$strCommunity" "$strHostname"  .1.3.6.1.4.1.24681.1.2.12.0 | awk '{print $4}' | sed 's/^"\(.*\).$/\1/')
-    	hdnum=$(snmpget -v1 -c "$strCommunity" "$strHostname"  .1.3.6.1.4.1.24681.1.2.10.0 | awk '{print $4}')
-    	name=$(snmpget -v1 -c "$strCommunity" "$strHostname"  .1.3.6.1.4.1.24681.1.2.13.0  | awk '{print $4}' | sed 's/^"\(.*\).$/\1/')
-    	
-            	echo NAS $name Model $model, Max HD number $hdnum
-            	exit 0
-    	
+	model=$(snmpget -v1 -c "$strCommunity" "$strHostname"  .1.3.6.1.4.1.24681.1.2.12.0 | awk '{print $4}' | sed 's/^"\(.*\).$/\1/')
+	hdnum=$(snmpget -v1 -c "$strCommunity" "$strHostname"  .1.3.6.1.4.1.24681.1.2.10.0 | awk '{print $4}')
+	name=$(snmpget -v1 -c "$strCommunity" "$strHostname"  .1.3.6.1.4.1.24681.1.2.13.0  | awk '{print $4}' | sed 's/^"\(.*\).$/\1/')
+
+	echo NAS $name Model $model, Max HD number $hdnum
+	exit 0
+
 #----------------------------------------------------------------------------------------------------------------------------------------------------
 else
     	echo -e "\nUnknown Part!" && exit "3"
