@@ -13,6 +13,7 @@ define command{
 }
 
 Parameters:
+
 $ARG1$ - Nas HostAddress
 
 $ARG2$ - Snmp Community Name with readonly rights
@@ -30,6 +31,7 @@ Please feel free to fork, and collaborate to this little but usefull project.
 # Parts of script to improve
 - Power unit check - it's not work
 - HDSTATUS check smart and temperature foreach disk and performance output
+- Volume Status rewrite this part
 - Improve Performance output for command
 
 # Test
