@@ -17,7 +17,7 @@
 #
 # contact the author directly for more information at: matthias@xcontrol.de
 ##########################################################################################
-#Version 1.19
+#Version 1.19a
 
 if [ ! "$#" == "5" ]; then
         echo
@@ -58,42 +58,46 @@ if [ "$strpart" == "diskused" ]; then
 
 	if [ "$UNITtest" == "TB" ]; then
 	 factor=$(echo "scale=0; 1000" | bc -l)
+	elif [ "$UNITtest" == "GB" ]; then
+	 factor=$(echo "scale=0; 100" | bc -l)	 
 	else
 	 factor=$(echo "scale=0; 1" | bc -l)
 	fi
 
 	if [ "$UNITtest2" == "TB" ]; then
 	 factor2=$(echo "scale=0; 1000" | bc -l)
+	elif [ "$UNITtest2" == "GB" ]; then
+	 factor2=$(echo "scale=0; 100" | bc -l)
 	else
 	 factor2=$(echo "scale=0; 1" | bc -l)
 	fi
-
+	
+	#echo $factor - $factor2
 	disk=$(echo "scale=0; $disk*$factor" | bc -l)
 	free=$(echo "scale=0; $free*$factor2" | bc -l)
 	
 	#debug used=$(echo "scale=0; 9000*1000" | bc -l) 
 	used=$(echo "scale=0; $disk-$free" | bc -l)
 	
+	#echo $disk - $free - $used
 	PERC=$(echo "scale=0; $used*100/$disk" | bc -l)
 	
 	diskF=$(echo "scale=0; $disk/$factor" | bc -l)
 	freeF=$(echo "scale=0; $free/$factor" | bc -l)
 	usedF=$(echo "scale=0; $used/$factor" | bc -l)
 
-	wdisk=$(echo "scale=0; $strWarning*$disk/100" | bc -l)
-	cdisk=$(echo "scale=0; $strCritical*$disk/100" | bc -l)
+	#wdisk=$(echo "scale=0; $strWarning*$disk/100" | bc -l)
+	#cdisk=$(echo "scale=0; $strCritical*$disk/100" | bc -l)
 	
-	#OUTPUT="total:"$disk"$UNITtest - used:"$used"$UNITtest - free:"$free"$UNITtest2 =  $PERC%|Used=$PERC%;$strWarning;$strCritical;0;100"
-        OUTPUT="Total:"$diskF"$UNITtest - Used:"$usedF"$UNITtest - Free:"$freeF"$UNITtest2 =  $PERC%|Used=$used;$wdisk;$cdisk;0;$disk"
+        OUTPUT="Total:"$diskF"$UNITtest - Used:"$usedF"$UNITtest - Free:"$freeF"$UNITtest2 - Used Space: $PERC%|Used=$PERC;$strWarning;$strCritical;0;100"
 	
 	if [ $PERC -ge $strCritical ]; then
 		echo "CRITICAL: "$OUTPUT
 		exit 2
-	
 	elif [ $PERC -ge $strWarning ]; then
 		echo "WARNING: "$OUTPUT
 		exit 1
-	else 
+	else
 		echo "OK: "$OUTPUT
 		exit 0
 	fi
