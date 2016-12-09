@@ -89,7 +89,7 @@ if [ "$strpart" == "diskused" ]; then
 	#wdisk=$(echo "scale=0; $strWarning*$disk/100" | bc -l)
 	#cdisk=$(echo "scale=0; $strCritical*$disk/100" | bc -l)
 	
-        OUTPUT="Total:"$diskF"$UNITtest - Used:"$usedF"$UNITtest - Free:"$freeF"$UNITtest2 - Used Space: $PERC%|Used=$PERC;$strWarning;$strCritical;0;100"
+        OUTPUT="Total:"$diskF"$UNITtest - Used:"$usedF"$UNITtest - Free:"$freeF"$UNITtest - Used Space: $PERC%|Used=$PERC;$strWarning;$strCritical;0;100"
 	
 	if [ $PERC -ge $strCritical ]; then
 		echo "CRITICAL: "$OUTPUT
