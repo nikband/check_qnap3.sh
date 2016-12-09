@@ -17,7 +17,7 @@
 #
 # contact the author directly for more information at: matthias@xcontrol.de
 ##########################################################################################
-#Version 1.19a
+#Version 1.20
 
 if [ ! "$#" == "5" ]; then
         echo
@@ -592,8 +592,29 @@ elif [ "$strpart" == "volstatus" ]; then
 
         VOLCAPACITY=$(snmpget -v2c -c "$strCommunity" "$strHostname" .1.3.6.1.4.1.24681.1.2.17.1.4.$VOL | awk '{print $4}' | sed 's/^"\(.*\).$/\1/')
         VOLFREESIZE=$(snmpget -v2c -c "$strCommunity" "$strHostname" .1.3.6.1.4.1.24681.1.2.17.1.5.$VOL | awk '{print $4}' | sed 's/^"\(.*\).$/\1/')
+        UNITtest=$(snmpget -v1 -c "$strCommunity" "$strHostname" 1.3.6.1.4.1.24681.1.2.17.1.4.$VOL | awk '{print $5}' | sed 's/.*\(.B\).*/\1/')
+	UNITtest2=$(snmpget -v1 -c "$strCommunity" "$strHostname" 1.3.6.1.4.1.24681.1.2.17.1.5.$VOL | awk '{print $5}' | sed 's/.*\(.B\).*/\1/')
 
-        VOLPCT=`echo "($VOLFREESIZE*100)/$VOLCAPACITY" | bc`
+	if [ "$UNITtest" == "TB" ]; then
+	 factor=$(echo "scale=0; 1000" | bc -l)
+	elif [ "$UNITtest" == "GB" ]; then
+	 factor=$(echo "scale=0; 100" | bc -l)
+	else
+	 factor=$(echo "scale=0; 1" | bc -l)
+	fi
+
+	if [ "$UNITtest2" == "TB" ]; then
+	 factor2=$(echo "scale=0; 1000" | bc -l)
+	elif [ "$UNITtest2" == "GB" ]; then
+	 factor2=$(echo "scale=0; 100" | bc -l)
+	else
+	 factor2=$(echo "scale=0; 1" | bc -l)
+	fi
+	
+	VOLCAPACITYF=$(echo "scale=0; $VOLCAPACITY*$factor" | bc -l)
+	VOLFREESIZEF=$(echo "scale=0; $VOLFREESIZE*$factor2" | bc -l)
+
+        VOLPCT=`echo "($VOLFREESIZEF*100)/$VOLCAPACITYF" | bc`
 
         if [ "$VOLPCT" -le "$strCritical" ]; then
                 VOLPCT="CRITICAL: $VOLPCT"
@@ -604,9 +625,9 @@ elif [ "$strpart" == "volstatus" ]; then
         fi
 
         if [ "$VOL" -lt "$VOLCOUNT" ]; then
-           ALLOUTPUT="${ALLOUTPUT}Volume #${VOL}: $VOLSTAT, Total Size (bytes): $VOLCAPACITY, Free: $VOLFREESIZE (${VOLPCT}%), "
+           ALLOUTPUT="${ALLOUTPUT}Volume #${VOL}: $VOLSTAT, Total Size (bytes): $VOLCAPACITY $UNITtest, Free: $VOLFREESIZE $UNITtest2 (${VOLPCT}%), "
         else
-           ALLOUTPUT="${ALLOUTPUT}Volume #${VOL}: $VOLSTAT, Total Size (bytes): $VOLCAPACITY, Free: $VOLFREESIZE (${VOLPCT}%)"
+           ALLOUTPUT="${ALLOUTPUT}Volume #${VOL}: $VOLSTAT, Total Size (bytes): $VOLCAPACITY $UNITtest, Free: $VOLFREESIZE $UNITtest2 (${VOLPCT}%)"
         fi
 		
 	#Performance Data
