@@ -38,6 +38,7 @@ Please feel free to fork, and collaborate to this little but usefull project.
 # Test
 This script was tested with:
 - QNAP model TS-853U-RP (with 4 disk)
+- QNAP model TS-859U+ (by Omar S. Ramirez thanks for your help)
 - QNAP model TS-212 and TS-231P (by github user mir07 Michael Rasmussen)
 
 Nicola
