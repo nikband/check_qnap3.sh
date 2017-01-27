@@ -17,7 +17,7 @@
 #
 # contact the author directly for more information at: matthias@xcontrol.de
 ##########################################################################################
-#Version 1.20
+#Version 1.21
 
 if [ ! "$#" == "5" ]; then
         echo
@@ -89,7 +89,7 @@ if [ "$strpart" == "diskused" ]; then
 	#wdisk=$(echo "scale=0; $strWarning*$disk/100" | bc -l)
 	#cdisk=$(echo "scale=0; $strCritical*$disk/100" | bc -l)
 	
-        OUTPUT="Total:"$diskF"$UNITtest - Used:"$usedF"$UNITtest - Free:"$freeF"$UNITtest - Used Space: $PERC%|Used=$PERC;$strWarning;$strCritical;0;100"
+        OUTPUT="Total:"$diskF"$UNITtest - Used:"$usedF"$UNITtest - Free:"$freeF"$UNITtest2 - Used Space: $PERC%|Used=$PERC;$strWarning;$strCritical;0;100"
 	
 	if [ $PERC -ge $strCritical ]; then
 		echo "CRITICAL: "$OUTPUT
@@ -699,7 +699,11 @@ elif [ "$strpart" == "fans" ]; then
 	fi
 	PERFOUTPUT=$PERFOUTPUT"Fan-$FAN=$FANSPEED;$strWarning;$strCritical" 
 
-        if [ "$FANSPEED" -le "$strCritical" ]; then
+        if [ "$FANSPEED" == "" ]; then
+                FANSTAT="CRITICAL: $FANSPEED RPM"
+                CRITICAL=1
+		
+        elif [ "$FANSPEED" -le "$strCritical" ]; then
                 FANSTAT="CRITICAL: $FANSPEED RPM"
                 CRITICAL=1
 
