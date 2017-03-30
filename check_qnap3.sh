@@ -1,5 +1,5 @@
 #!/bin/bash
-############################# Manteined by Nicola Bandini                 ###############
+############################# Written and Manteined by Nicola Bandini     ###############
 ############################# Created and written by Matthias Luettermann ###############
 ############################# finetuning by primator@gmail.com
 ############################# finetuning by n.bandini@gmail.com
@@ -18,8 +18,11 @@
 # contact the author directly for more information at: matthias@xcontrol.de
 ##########################################################################################
 #Version 1.21
+plgVer=1.21
 
 if [ ! "$#" == "5" ]; then
+        echo
+        echo "Check_QNAP3 "$plgVer
         echo
     	echo "Warning: Wrong command line arguments."
         echo
@@ -29,6 +32,7 @@ if [ ! "$#" == "5" ]; then
         echo
 	echo "hdstatus shows status & temp; volstatus check all vols and vols space; powerstatus check power supply"
         echo "<#> is 1-8 for hd, 1-5 for vol"
+	echo
         echo " Example: ./check_qnap 127.0.0.1 public diskusage 80 95"
 	echo
         exit 3
