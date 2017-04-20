@@ -243,11 +243,11 @@ elif [ "$strpart" == "hd3temp" ]; then
             	echo "HDD3 temperatur to high!: "$OUTPUT
             	exit 2
     	else
-            	if [ $TEMPHD -le "$strCritical" ]; then
+            	if [ $TEMPHD -ge "$strCritical" ]; then
                     	echo "CRITICAL: "$OUTPUT
                     	exit 2
             	fi
-            	if [ $TEMPHD -le "$strWarning" ]; then
+            	if [ $TEMPHD -ge "$strWarning" ]; then
                     	echo "WARNING: "$OUTPUT
                     	exit 1
             	fi
