@@ -33,7 +33,7 @@ if [ ! "$#" == "5" ]; then
 	echo "hdstatus shows status & temp; volstatus check all vols and vols space; powerstatus check power supply"
         echo "<#> is 1-8 for hd, 1-5 for vol"
 	echo
-        echo " Example for diskusage: ./check_qnap3.sh 127.0.0.1 public diskusage 80 95"
+        echo " Example for diskusage: ./check_qnap3.sh 127.0.0.1 public diskused 80 95"
 	echo
 	echo " Example for volstatus: ./check_qnap3.sh 127.0.0.1 public volstatus 15 10"
 	echo "                        critical and warning value are releted to free disk space"
