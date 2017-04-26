@@ -34,8 +34,12 @@ if [ ! "$#" == "5" ]; then
         echo "<#> is 1-8 for hd, 1-5 for vol"
 	echo
         echo " Example for diskusage: ./check_qnap3.sh 127.0.0.1 public diskusage 80 95"
+	echo
 	echo " Example for volstatus: ./check_qnap3.sh 127.0.0.1 public volstatus 15 10"
 	echo "                        critical and warning value are releted to free disk space"
+	echo
+	echo " Example for fans: ./check_qnap3.sh 127.0.0.1 public fans 2000 1900"
+	echo "                   critical and warning are minimum speed in rpm for fans"
 	echo
         exit 3
 fi
