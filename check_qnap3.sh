@@ -3,7 +3,7 @@
 ############################# Created and written by Matthias Luettermann ###############
 ############################# finetuning by primator@gmail.com
 ############################# finetuning by n.bandini@gmail.com
-############################# with code by Tom Lesniak
+############################# with code by Tom Lesniak and Hugo Geijteman 
 #
 #	copyright (c) 2008 Shahid Iqbal
 # This program is free software; you can redistribute it and/or modify
@@ -17,8 +17,8 @@
 #
 # contact the author directly for more information at: matthias@xcontrol.de
 ##########################################################################################
-#Version 1.21
-plgVer=1.21
+#Version 1.22
+plgVer=1.22
 
 if [ ! "$#" == "5" ]; then
         echo
@@ -58,7 +58,7 @@ echo "CRITICAL: SNMP to $strHostname is not available";
 exit 2; 
 fi
 
-# DISKUSAGE ---------------------------------------------------------------------------------------------------------------------------------------
+# DISKUSED ---------------------------------------------------------------------------------------------------------------------------------------
 if [ "$strpart" == "diskused" ]; then
 	disk=$(snmpget -v1 -c "$strCommunity" "$strHostname" 1.3.6.1.4.1.24681.1.2.17.1.4.1 | awk '{print $4}' | sed 's/.\(.*\)/\1/')
 	free=$(snmpget -v1 -c "$strCommunity" "$strHostname" 1.3.6.1.4.1.24681.1.2.17.1.5.1 | awk '{print $4}' | sed 's/.\(.*\)/\1/')
@@ -759,7 +759,7 @@ elif [ "$strpart" == "sysinfo" ]; then
 	name=$(snmpget -v1 -c "$strCommunity" "$strHostname"  .1.3.6.1.4.1.24681.1.2.13.0  | awk '{print $4}' | sed 's/^"\(.*\)$/\1/')
 	firmware=$(snmpget -v1 -c "$strCommunity" "$strHostname"  .1.3.6.1.2.1.47.1.1.1.1.9.1 | awk '{print $4}' | sed 's/^"\(.*\)$/\1/')
 
-	echo NAS $name Model $model, Firmware $firmware, Max HD number $hdnum, No. Volume $VOLCOUNT
+	echo NAS $name, Model $model, Firmware $firmware, Max HD number $hdnum, No. Volume $VOLCOUNT
 	exit 0
 
 #----------------------------------------------------------------------------------------------------------------------------------------------------
