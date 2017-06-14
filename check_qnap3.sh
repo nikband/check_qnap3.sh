@@ -17,8 +17,8 @@
 #
 # contact the author directly for more information at: matthias@xcontrol.de
 ##########################################################################################
-#Version 1.22
-plgVer=1.22
+#Version 1.23
+plgVer=1.23
 
 if [ ! "$#" == "5" ]; then
         echo
@@ -51,10 +51,10 @@ strWarning=$4
 strCritical=$5
 
 # Check if QNAP is online
-TEST=$(snmpstatus -v 1 $Hostname -c "$strCommunity" -t 5 -r 0 2>&1) 
+TEST=$(snmpstatus -v2c $strHostname -c "$strCommunity" -t 5 -r 0 2>&1) 
 # echo "Test: $TEST"; 
 if [ "$TEST" == "Timeout: No Response from $strHostname" ]; then 
-echo "CRITICAL: SNMP to $strHostname is not available"; 
+echo "CRITICAL: SNMP to $strHostname is not available or wrong community string"; 
 exit 2; 
 fi
 
