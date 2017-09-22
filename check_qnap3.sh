@@ -115,22 +115,21 @@ if [ "$strpart" == "diskused" ]; then
 	
 # CPU ----------------------------------------------------------------------------------------------------------------------------------------------
 elif [ "$strpart" == "cpu" ]; then
-    	CPU=$(snmpget -v2c -c "$strCommunity" $strHostname 1.3.6.1.4.1.24681.1.2.1.0 | awk '{print $4 $5}' | sed 's/.\(.*\)...../\1/')
-	OUTPUT="CPU Load="$CPU"%|CPU load="$CPU"%;$strWarning;$strCritical;0;100" 
+        CPU=$(snmpget -v2c -Ln -c "$strCommunity" $strHostname 1.3.6.1.4.1.24681.1.2.1.0 -Oqv | sed -E 's/"|\s%//g')
 
-   	if [ $CPU -ge $strCritical ]; then
-		echo "CRITICAL: "$OUTPUT
-		exit 2
+        OUTPUT="CPU Load="$CPU"%|CPU load="$CPU"%;$strWarning;$strCritical;0;100"
 
-	elif [ $CPU -ge $strWarning ]; then
-		echo "WARNING: "$OUTPUT
-		exit 1
-
-	else 
-		echo "OK: "$OUTPUT
-		exit 0
-	fi
-
+        if (( $(echo "$CPU > $strCritical" | bc -l) )); then
+               echo "CRITICAL: "$OUTPUT
+               exit 2
+        elif ((  $(echo "$CPU > $strWarning" | bc -l) )); then
+                echo "WARNING: "$OUTPUT
+                exit 1
+        else
+                echo "OK: "$OUTPUT
+                exit 0
+        fi
+	
 # CPUTEMP ----------------------------------------------------------------------------------------------------------------------------------------------
 elif [ "$strpart" == "cputemp" ]; then
     	TEMP0=$(snmpget -v2c -c "$strCommunity" $strHostname  .1.3.6.1.4.1.24681.1.2.5.0 | awk '{print $4}' | cut -c2-3)
