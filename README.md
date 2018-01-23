@@ -28,7 +28,7 @@ $ARG5$ - Critical (mandatory for some check use simbolic value like 1)
 
 # Contributing
 
-Please feel free to fork, and collaborate to this little but usefull project.
+Please feel free to fork and collaborate to this little but usefull project.
 
 # Parts of script to improve
 
