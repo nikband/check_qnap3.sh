@@ -544,17 +544,16 @@ elif [ "$strpart" == "hd8status" ]; then
 # HD Status----------------------------------------------------------------------------------------------------------------------------------------
 elif [ "$strpart" == "hdstatus" ]; then
 
-	hdnum=$(snmpget -v2c -c "$strCommunity" "$strHostname"  .1.3.6.1.4.1.24681.1.2.10.0 | awk '{print $4}')
+	hdnum=$(snmpget -v2c -c "$strCommunity" "$strHostname"  1.3.6.1.4.1.24681.1.4.1.1.1.1.5.1.0 | awk '{print $4}')
 
         hdok=0
         hdnop=0
 	output_crit=""
-	
+
 	for (( c=1; c<=$hdnum; c++ ))
 	do
-	   HD=$(snmpget -v2c -c "$strCommunity" -mALL "$strHostname" 1.3.6.1.4.1.24681.1.2.11.1.7.$c | awk '{print $4}' | sed 's/^"\(.*\).$/\1/')
-	   
-	   if [ "$HD" == "GOOD" ]; then
+	   HD=$(snmpget -v2c -c "$strCommunity" -mALL "$strHostname" 1.3.6.1.4.1.24681.1.4.1.1.1.1.5.2.1.4.$c | awk '{print $4}' | sed 's/^"\(.*\).$/\1/')
+	   if [ ${HD^^} == "GOOD" ]; then
             	hdok=$(echo "scale=0; $hdok+1" | bc -l)
     	   elif [ "$HD" == "--" ]; then    	        
     	        hdnop=$(echo "scale=0; $hdnop+1" | bc -l)
