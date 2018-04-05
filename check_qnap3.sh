@@ -3,7 +3,7 @@
 ############################# Created and written by Matthias Luettermann ###############
 ############################# finetuning by primator@gmail.com
 ############################# finetuning by n.bandini@gmail.com
-############################# with code by Tom Lesniak and Hugo Geijteman 
+############################# with code by Tom Lesniak, Hugo Geijteman and 
 #
 #	copyright (c) 2008 Shahid Iqbal
 # This program is free software; you can redistribute it and/or modify
@@ -17,8 +17,8 @@
 #
 # contact the author directly for more information at: matthias@xcontrol.de
 ##########################################################################################
-#Version 1.23
-plgVer=1.23
+#Version 1.23.1
+plgVer=1.23.1
 
 if [ ! "$#" == "5" ]; then
         echo
@@ -28,7 +28,7 @@ if [ ! "$#" == "5" ]; then
         echo
 	echo "Usage: ./check_qnap <hostname> <community> <part> <warning> <critical>"
         echo
-	echo "Parts are: sysinfo, systemuptime, temp, cpu, cputemp, freeram, powerstatus, fans, diskused, hdstatus, hd#status, hd#temp, volstatus (Raid Volume Status), vol#status"
+	echo "Parts are: sysinfo, systemuptime, temp, cpu, cputemp, freeram, powerstatus, fans, diskused, hdstatus, hd#status, hdtemp, hd#temp, volstatus (Raid Volume Status), vol#status"
         echo
 	echo "hdstatus shows status & temp; volstatus check all vols and vols space; powerstatus check power supply"
         echo "<#> is 1-8 for hd, 1-5 for vol"
@@ -196,6 +196,40 @@ elif [ "$strpart" == "temp" ]; then
             	echo "OK: "$OUTPUT
             	exit 0
     	fi
+
+# ALL HDs TEMP ---------------------------------------------------------------------------------------------------------------------------------------
+# Don't bother with perfdata, this plugin is simply to make us aware of a potential issue. The QNAP interface can give us details.
+elif [ "$strpart" == "hdtemp" ]; then
+
+    hdnum=$(snmpget -v2c -c "$strCommunity" "$strHostname"  1.3.6.1.4.1.24681.1.4.1.1.1.1.5.1.0 | awk '{print $4}')
+
+    output="OK: ($hdnum disks)"
+    ret=0
+
+	for (( c=1; c<=$hdnum; c++ ))
+	do
+	   TEMPHD=$(snmpget -v2c -c "$strCommunity" -mALL "$strHostname" 1.3.6.1.4.1.24681.1.4.1.1.1.1.5.2.1.6.$c | awk '{print $4}')
+	   if [ ${TEMPHD} -ge "$strWarning" ]; then
+
+	        if [ ${ret} -eq 0 ]; then
+	            output=""
+	            ret=1
+                fi
+
+            ENC=$(snmpget -v2c -c "$strCommunity" -mALL "$strHostname" 1.3.6.1.4.1.24681.1.4.1.1.1.1.5.2.1.3.$c | awk '{print $4}')
+            ID=$(snmpget -v2c -c "$strCommunity" -mALL "$strHostname" 1.3.6.1.4.1.24681.1.4.1.1.1.1.5.2.1.2.$c | awk '{print $4}')
+
+            if [ ${TEMPHD} -ge "$strCritical" ]; then
+                ret=2
+                output+="CRITICAL: Disk ${ID} in enclosure ${ENC} is ${TEMPHD}C \n"
+            else
+                output+="WARN: Disk ${ID} in enclosure ${ENC} is ${TEMPHD}C \n"
+            fi
+	   fi
+	done
+
+	printf "$output"
+	exit ${ret}
 
 # HD1 Temperature---------------------------------------------------------------------------------------------------------------------------------------
 elif [ "$strpart" == "hd1temp" ]; then
