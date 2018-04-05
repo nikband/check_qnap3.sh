@@ -3,7 +3,7 @@
 ############################# Created and written by Matthias Luettermann ###############
 ############################# finetuning by primator@gmail.com
 ############################# finetuning by n.bandini@gmail.com
-############################# with code by Tom Lesniak, Hugo Geijteman and 
+############################# with code by Tom Lesniak, Hugo Geijteman and Jon Marston
 #
 #	copyright (c) 2008 Shahid Iqbal
 # This program is free software; you can redistribute it and/or modify
