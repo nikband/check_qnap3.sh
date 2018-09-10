@@ -3,7 +3,7 @@
 ############################# Created and written by Matthias Luettermann ###############
 ############################# finetuning by primator@gmail.com
 ############################# finetuning by n.bandini@gmail.com
-############################# with code by Tom Lesniak, Hugo Geijteman and Jon Marston
+############################# with code and fix by Tom Lesniak, Hugo Geijteman, Jon Marston and Nathaelr
 #
 #	copyright (c) 2008 Shahid Iqbal
 # This program is free software; you can redistribute it and/or modify
@@ -17,8 +17,8 @@
 #
 # contact the author directly for more information at: matthias@xcontrol.de
 ##########################################################################################
-#Version 1.23.1
-plgVer=1.23.1
+#Version 1.23.2
+plgVer=1.23.2
 
 if [ ! "$#" == "5" ]; then
         echo
