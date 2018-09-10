@@ -67,17 +67,17 @@ if [ "$strpart" == "diskused" ]; then
         #echo $disk - $free - $UNITtest - $UNITtest2 
 
 	if [ "$UNITtest" == "TB" ]; then
-	 factor=$(echo "scale=0; 1000" | bc -l)
+	 factor=$(echo "scale=0; 1000000" | bc -l)
 	elif [ "$UNITtest" == "GB" ]; then
-	 factor=$(echo "scale=0; 100" | bc -l)	 
+	 factor=$(echo "scale=0; 1000" | bc -l)	 
 	else
 	 factor=$(echo "scale=0; 1" | bc -l)
 	fi
 
 	if [ "$UNITtest2" == "TB" ]; then
-	 factor2=$(echo "scale=0; 1000" | bc -l)
+	 factor2=$(echo "scale=0; 1000000" | bc -l)
 	elif [ "$UNITtest2" == "GB" ]; then
-	 factor2=$(echo "scale=0; 100" | bc -l)
+	 factor2=$(echo "scale=0; 1000" | bc -l)
 	else
 	 factor2=$(echo "scale=0; 1" | bc -l)
 	fi
@@ -93,7 +93,7 @@ if [ "$strpart" == "diskused" ]; then
 	PERC=$(echo "scale=0; $used*100/$disk" | bc -l)
 	
 	diskF=$(echo "scale=0; $disk/$factor" | bc -l)
-	freeF=$(echo "scale=0; $free/$factor" | bc -l)
+	freeF=$(echo "scale=0; $free/$factor2" | bc -l)
 	usedF=$(echo "scale=0; $used/$factor" | bc -l)
 
 	#wdisk=$(echo "scale=0; $strWarning*$disk/100" | bc -l)
@@ -638,17 +638,17 @@ elif [ "$strpart" == "volstatus" ]; then
 	UNITtest2=$(snmpget -v2c -c "$strCommunity" "$strHostname" 1.3.6.1.4.1.24681.1.2.17.1.5.$VOL | awk '{print $5}' | sed 's/.*\(.B\).*/\1/')
 
 	if [ "$UNITtest" == "TB" ]; then
-	 factor=$(echo "scale=0; 1000" | bc -l)
+	 factor=$(echo "scale=0; 1000000" | bc -l)
 	elif [ "$UNITtest" == "GB" ]; then
-	 factor=$(echo "scale=0; 100" | bc -l)
+	 factor=$(echo "scale=0; 1000" | bc -l)
 	else
 	 factor=$(echo "scale=0; 1" | bc -l)
 	fi
 
 	if [ "$UNITtest2" == "TB" ]; then
-	 factor2=$(echo "scale=0; 1000" | bc -l)
+	 factor2=$(echo "scale=0; 1000000" | bc -l)
 	elif [ "$UNITtest2" == "GB" ]; then
-	 factor2=$(echo "scale=0; 100" | bc -l)
+	 factor2=$(echo "scale=0; 1000" | bc -l)
 	else
 	 factor2=$(echo "scale=0; 1" | bc -l)
 	fi
